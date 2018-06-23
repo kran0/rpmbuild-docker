@@ -9,14 +9,15 @@ elif ls $*
 then
 
  # main loop
- for file in $*
+ for file in $(echo $*)
  do
   if grep '.spec$\|.src.rpm$'<<<$file
   then
    echo "INFO: Rpmbuild is using $file as source."
-   dnf -y builddep $file || exit 1
-   grep '.spec$'<<<$file    && rpmbuild -ba $file       || exit 1
-   grep '.src.rpm$'<<<$file && rpmbuild --rebuild $file || exit 1
+   sudo dnf -y builddep $file
+   echo status[$file]='n/a'
+   grep '.spec$'<<<$file    && rpmbuild -ba $file       && status[$file]='OK'
+   grep '.src.rpm$'<<<$file && rpmbuild --rebuild $file && status[$file]='OK'
   else
   echo "WARNING: $file not matches to mask. \*.spec or \*.src.rpm only allowed."
   fi
@@ -26,4 +27,7 @@ else
  echo "WARNING: No source files found. Nothing to do"
 fi
 
-
+for file in $*
+do
+ echo "$file:	${status[$file]}"
+done
