@@ -1,0 +1,29 @@
+#!/bin/sh
+
+ln -vs $PWD $HOME/rpmbuild
+
+if [ -z $1 ]
+then
+ echo USAGE: $0 [FILE [FILE] ]
+elif ls $*
+then
+
+ # main loop
+ for file in $*
+ do
+  if grep '.spec$\|.src.rpm$'<<<$file
+  then
+   echo "INFO: Rpmbuild is using $file as source."
+   dnf -y builddep $file || exit 1
+   grep '.spec$'<<<$file    && rpmbuild -ba $file       || exit 1
+   grep '.src.rpm$'<<<$file && rpmbuild --rebuild $file || exit 1
+  else
+  echo "WARNING: $file not matches to mask. \*.spec or \*.src.rpm only allowed."
+  fi
+ done
+
+else
+ echo "WARNING: No source files found. Nothing to do"
+fi
+
+
