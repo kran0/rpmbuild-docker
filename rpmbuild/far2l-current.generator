@@ -1,6 +1,25 @@
-Name: far2l
-Version: 2.0
-Release: %revision.fc28
+#!/bin/sh
+
+NAME=far2l
+VERS=2.0
+
+BASEDIR=$(dirname $0)
+SPEC_TEMPLATE="$BASEDIR/far2l-current.spectemplate"
+DESTDIR=$BASEDIR # the rpmbuild directory
+mkdir -p $DESTDIR/{SOURCES,SPECS}
+WORKDIR=$(mktemp --directory)
+TMPDIRS="$TMPDIRS $WORKDIR"
+
+git clone https://github.com/elfmz/far2l $WORKDIR/$NAME-$VERS;
+REVISION=$(cd $WORKDIR/$NAME-$VERS && git rev-parse --verify --short HEAD);
+
+rm -rf "$WORKDIR/$NAME-$VERS/.git"
+tar cf "$DESTDIR/SOURCES/$NAME-$VERS.tar" -C "$WORKDIR" ./$NAME-$VERS
+
+cat > $DESTDIR/SPECS/$NAME-$VERS.spec <<EOF
+Name: $NAME
+Version: $VERS
+Release: $REVISION.fc28
 
 Summary: Linux port of FAR v2
 
@@ -51,3 +70,7 @@ ln -s ../../%_libexecdir/%name/far2l %buildroot%_bindir/%name
 %changelog
 * Sat Jun 23 2018 Pavel Shumskii <shumskii+rpmbuild@gmail.com> 2.0-fc28
 - initial build
+
+* $(date +%s) $0
+- generated from template
+EOF

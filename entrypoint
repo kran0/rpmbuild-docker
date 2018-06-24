@@ -1,6 +1,7 @@
 #!/bin/sh
 
 ln -vs $PWD $HOME/rpmbuild
+declare -A STATUS
 
 if [ -z $1 ]
 then
@@ -13,11 +14,11 @@ then
  do
   if grep '.spec$\|.src.rpm$'<<<$file
   then
+   STATUS[$file]='n/a'
    echo "INFO: Rpmbuild is using $file as source."
    sudo dnf -y builddep $file
-   echo status[$file]='n/a'
-   grep '.spec$'<<<$file    && rpmbuild -ba $file       && status[$file]='OK'
-   grep '.src.rpm$'<<<$file && rpmbuild --rebuild $file && status[$file]='OK'
+   grep '.spec$'<<<$file    && rpmbuild -ba $file       && STATUS[$file]='ok'
+   grep '.src.rpm$'<<<$file && rpmbuild --rebuild $file && STATUS[$file]='ok'
   else
   echo "WARNING: $file not matches to mask. \*.spec or \*.src.rpm only allowed."
   fi
@@ -27,7 +28,9 @@ else
  echo "WARNING: No source files found. Nothing to do"
 fi
 
-for file in $*
+rm -rf $HOME/rpmbuild/BUILD*
+
+for file in ${!STATUS[@]}
 do
- echo "$file:	${status[$file]}"
+ echo "$file:	${STATUS[$file]}"
 done
