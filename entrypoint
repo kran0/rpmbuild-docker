@@ -1,5 +1,6 @@
 #!/bin/sh
 
+[ -z $HOME ] && HOME='/work'
 ln -vs $PWD $HOME/rpmbuild
 declare -A STATUS
 
