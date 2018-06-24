@@ -1,6 +1,5 @@
 #!/bin/sh
 
-[ -z $HOME ] && HOME='/work'
 ln -vs $PWD $HOME/rpmbuild
 declare -A STATUS
 
@@ -17,7 +16,7 @@ then
   then
    STATUS[$file]='n/a'
    echo "INFO: Rpmbuild is using $file as source."
-   sudo dnf -y builddep $file
+   sudo dnf builddep -y $file
    grep '.spec$'<<<$file    && rpmbuild -ba $file       && STATUS[$file]='ok'
    grep '.src.rpm$'<<<$file && rpmbuild --rebuild $file && STATUS[$file]='ok'
   else
@@ -30,6 +29,7 @@ else
 fi
 
 rm -rf $HOME/rpmbuild/BUILD*
+chmod -R a+rw "$HOME/rpmbuild/"
 
 for file in ${!STATUS[@]}
 do

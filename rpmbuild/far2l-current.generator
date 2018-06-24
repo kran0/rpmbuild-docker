@@ -68,9 +68,11 @@ ln -s ../../%_libexecdir/%name/far2l %buildroot%_bindir/%name
 %_libexecdir/%name/
 
 %changelog
-* Sat Jun 23 2018 Pavel Shumskii <shumskii+rpmbuild@gmail.com> 2.0-fc28
-- initial build
-
 * $(date) $0
 - generated from template
+
+* Sat Jun 23 2018 Pavel Shumskii <shumskii+rpmbuild@gmail.com> 2.0-fc28
+- initial build
 EOF
+
+rm -rf $TMPDIRS
