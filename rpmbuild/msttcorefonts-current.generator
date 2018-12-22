@@ -18,7 +18,7 @@ tar cf "$DESTDIR/SOURCES/$NAME-$VERS.tar" -C "$WORKDIR" ./$NAME-$VERS
 cat > $DESTDIR/SPECS/$NAME-$VERS.spec <<EOF
 Name: $NAME
 Version: $VERS
-Release: $REVISION.fc29
+Release: $REVISION.fc28
 
 Summary: Linux port of FAR v2
 
