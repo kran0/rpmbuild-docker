@@ -1,77 +1,11 @@
 #!/bin/sh
 
-NAME=far2l
-VERS=2.0
+NAME=msttcorefonts
+VERS=2.5-1
 
 BASEDIR=$(dirname $0)
 DESTDIR=$BASEDIR # the rpmbuild directory
 mkdir -p $DESTDIR/{SOURCES,SPECS}
-WORKDIR=$(mktemp --directory)
-TMPDIRS="$TMPDIRS $WORKDIR"
 
-git clone https://github.com/elfmz/far2l $WORKDIR/$NAME-$VERS;
-REVISION=$(cd $WORKDIR/$NAME-$VERS && git rev-parse --verify --short HEAD);
-
-rm -rf "$WORKDIR/$NAME-$VERS/.git"
-tar cf "$DESTDIR/SOURCES/$NAME-$VERS.tar" -C "$WORKDIR" ./$NAME-$VERS
-
-cat > $DESTDIR/SPECS/$NAME-$VERS.spec <<EOF
-Name: $NAME
-Version: $VERS
-Release: $REVISION.fc28
-
-Summary: Linux port of FAR v2
-
-Group: File tools
-License: GPLv2
-Url: https://github.com/elfmz/far2l
-
-# Source-git: https://github.com/elfmz/far2l.git
-Source: %name-%version.tar
-
-BuildRequires: gawk, m4, glib2-devel, wxGTK3-devel, cmake >= 3.2.2, gcc-c++
-Requires: wxGTK, compat-wxGTK3-gtk2
-
-%description
-Linux port of FAR v2
-ALPHA VERSION - currently interesting only for entusiasts!!!
-
-Working plugins: colorer, multiarc, farftp, tmppanel, align, autowrap, drawline, editcase, SimpleIndent.
-
-License: GNU/GPLv2
-
-Used code from projects:
-FAR for Windows
-Wine
-ANSICON
-Portable UnRAR
-7z ANSI-C Decoder
-
-%global debug_package %{nil}
-
-%prep
-%setup
-
-%build
-cmake -DCMAKE_BUILD_TYPE=Release
-make -j4
-
-%install
-mkdir -p %buildroot%_bindir/
-mkdir -p %buildroot%_libexecdir/%name/
-cp -a install/* %buildroot%_libexecdir/%name/
-ln -s ../../%_libexecdir/%name/far2l %buildroot%_bindir/%name
-
-%files
-%_bindir/%name
-%_libexecdir/%name/
-
-%changelog
-* $(date) $0
-- generated from template
-
-* Sat Jun 23 2018 Pavel Shumskii <shumskii+rpmbuild@gmail.com> 2.0-fc28
-- initial build
-EOF
-
-rm -rf $TMPDIRS
+curl http://corefonts.sourceforge.net/msttcorefonts-2.5-1.spec\
+     > $DESTDIR/SPECS/$NAME-$VERS.spec
