@@ -70,6 +70,9 @@ ln -s ../../%_libexecdir/%name/far2l %buildroot%_bindir/%name
 * $(date) $0
 - generated from template
 
+* Sat Dec 22 2018 Pavel Shumskii <shumskii+rpmbuild@gmail.com> 2.0-fc29
+- move to fc29
+
 * Sat Jun 23 2018 Pavel Shumskii <shumskii+rpmbuild@gmail.com> 2.0-fc28
 - initial build
 EOF
