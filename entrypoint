@@ -3,7 +3,7 @@
 ln -vs $PWD $HOME/rpmbuild
 declare -A STATUS
 
-if [ -z $1 ]
+if [ -z "$1" ]
 then
  echo USAGE: $0 [FILE [FILE] ]
 elif ls $*
