@@ -1,4 +1,4 @@
-FROM fedora:28
+FROM fedora:29
 
 ENV USER=dummy UID=100 HOMEDIR=/home/dummy
 
